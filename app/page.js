@@ -6,13 +6,15 @@ import { IoCheckboxOutline } from "react-icons/io5";
 import { PiNotePencilThin } from "react-icons/pi";
 import { MdPhonelinkLock } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Header from "./components/header";
+import { contexty } from "./layout";
 import Body from "./components/body";
 import Task from "./components/task";
 export default function Home() {
+  const contextify = useContext(contexty);
   const [newItem, setNewItem] = useState("");
-  const [tasks, setTasks] = useState([]);
+  // const [tasks, setTasks] = useState([]);
   const [query, setQuery] = useState("");
   const [btnState, setBtnState] = useState(false);
 
@@ -26,7 +28,7 @@ export default function Home() {
     return tasks.filter((task) => task.value.includes(query));
   };
 
-  const filtered = getFilteredItems(query, tasks);
+  const filtered = getFilteredItems(query, contextify.tasks);
   const addItem = (e) => {
     e.preventDefault();
     if (!newItem) {
@@ -37,8 +39,7 @@ export default function Home() {
       id: Math.floor(Math.random() * 1000),
       value: newItem,
     };
-    setTasks([...tasks, item]);
-    console.log(tasks);
+    contextify.setTasks([...contextify.tasks, item]);
     setNewItem("");
   };
   const delTask = (targetId) => {
